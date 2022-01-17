@@ -21,9 +21,10 @@ RUN apk add --no-cache \
         openssh-client \
         rsync \
         git \
-        gnupg \
+        gnupg
+
     ## Install go-replace
-    && if [ "$TARGETPLATFORM" = "linux/arm64" ]; then GO_REPLACE="gr-arm64-linux"; else GO_REPLACE="gr-64-linux"; fi \
+RUN if [ "$TARGETPLATFORM" = "linux/arm64" ]; then GO_REPLACE="gr-arm64-linux"; else GO_REPLACE="gr-64-linux"; fi \
     && wget -O "/usr/local/bin/go-replace" "https://github.com/webdevops/goreplace/releases/download/1.1.2/${GO_REPLACE}" \
     && chmod +x "/usr/local/bin/go-replace" \
 #    && "/usr/local/bin/go-replace" --version
