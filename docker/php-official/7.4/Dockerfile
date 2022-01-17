@@ -26,8 +26,8 @@ RUN mkdir -p \
     && gpg --keyserver hkp://keyserver.ubuntu.com:80 --recv-keys B42F6819007F00F88E364FD4036A9C25BF357DD4 \
     && gpg --batch --verify /tmp/gosu.asc "/baselayout/sbin/gosu" \
     && rm -rf "$GNUPGHOME" /tmp/gosu.asc \
-    && chmod +x "/baselayout/sbin/gosu" \
-    && "/baselayout/sbin/gosu" nobody true
+    && chmod +x "/baselayout/sbin/gosu"
+#    && "/baselayout/sbin/gosu" nobody true
 
 
 FROM php:7.4-fpm-buster
@@ -203,7 +203,8 @@ RUN set -x \
     && printf "\n" | pecl install vips \
     && echo extension=vips.so > /usr/local/etc/php/conf.d/vips.ini \
     && pecl install redis \
-    && pecl install mongodb \
+    && pecl install mon \
+    b \
     && pecl install imagick \
     && pecl install amqp \
     && echo extension=apcu.so > /usr/local/etc/php/conf.d/apcu.ini \
