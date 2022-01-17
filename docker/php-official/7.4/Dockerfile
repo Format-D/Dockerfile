@@ -5,7 +5,7 @@
 
 
 # Staged baselayout builder
-FROM webdevops/toolbox AS baselayout
+FROM registry.gitlab.com/format-d/devops/format-d-base-images/toolbox:latest AS baselayout
 ARG TARGETPLATFORM
 RUN mkdir -p \
         /baselayout/sbin \
