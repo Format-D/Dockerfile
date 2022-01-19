@@ -6,7 +6,7 @@
 
 # Staged baselayout builder
 FROM registry.gitlab.com/format-d/devops/format-d-base-images/toolbox:latest AS baselayout
-ARG TARGETPLATFORM
+ARG BUILDPLATFORM
 RUN mkdir -p \
         /baselayout/sbin \
         /baselayout/usr/local/bin \
@@ -14,20 +14,20 @@ RUN mkdir -p \
     && wget -O /tmp/baselayout-install.sh https://raw.githubusercontent.com/webdevops/Docker-Image-Baselayout/master/install.sh \
     && sh /tmp/baselayout-install.sh /baselayout \
     ## Install go-replace
-    && if [ "$TARGETPLATFORM" = "linux/arm64" ]; then GO_REPLACE="gr-arm64-linux"; else GO_REPLACE="gr-64-linux"; fi \
+    && if [ "$BUILDPLATFORM" = "linux/arm64" ]; then GO_REPLACE="gr-arm64-linux"; else GO_REPLACE="gr-64-linux"; fi \
     && wget -O "/baselayout/usr/local/bin/go-replace" "https://github.com/webdevops/goreplace/releases/download/1.1.2/${GO_REPLACE}" \
     && chmod +x "/baselayout/usr/local/bin/go-replace" \
 #    && "/baselayout/usr/local/bin/go-replace" --version \
     # Install gosu
-    && if [ "$TARGETPLATFORM" = "linux/arm64" ]; then ARCH="arm64"; else ARCH="amd64"; fi \
+    && if [ "$BUILDPLATFORM" = "linux/arm64" ]; then ARCH="arm64"; else ARCH="amd64"; fi \
     && wget -O "/baselayout/sbin/gosu" "https://github.com/tianon/gosu/releases/download/1.10/gosu-${ARCH}" \
     && wget -O "/tmp/gosu.asc" "https://github.com/tianon/gosu/releases/download/1.10/gosu-${ARCH}.asc" \
     && export GNUPGHOME="$(mktemp -d)" \
     && gpg --keyserver hkp://keyserver.ubuntu.com:80 --recv-keys B42F6819007F00F88E364FD4036A9C25BF357DD4 \
     && gpg --batch --verify /tmp/gosu.asc "/baselayout/sbin/gosu" \
     && rm -rf "$GNUPGHOME" /tmp/gosu.asc \
-    && chmod +x "/baselayout/sbin/gosu"
-#    && "/baselayout/sbin/gosu" nobody true
+    && chmod +x "/baselayout/sbin/gosu" \
+    && "/baselayout/sbin/gosu" nobody true
 
 
 FROM php:7.4-fpm-buster
@@ -203,8 +203,7 @@ RUN set -x \
     && printf "\n" | pecl install vips \
     && echo extension=vips.so > /usr/local/etc/php/conf.d/vips.ini \
     && pecl install redis \
-    && pecl install mon \
-    b \
+    && pecl install mongodb \
     && pecl install imagick \
     && pecl install amqp \
     && echo extension=apcu.so > /usr/local/etc/php/conf.d/apcu.ini \
