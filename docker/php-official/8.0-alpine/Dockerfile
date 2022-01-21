@@ -6,7 +6,7 @@
 
 # Staged baselayout builder
 FROM webdevops/toolbox AS baselayout
-ARG TARGETPLATFORM
+ARG BUILDPLATFORM
 RUN mkdir -p \
         /baselayout/sbin \
         /baselayout/usr/local/bin \
@@ -14,12 +14,12 @@ RUN mkdir -p \
     && wget -O /tmp/baselayout-install.sh https://raw.githubusercontent.com/webdevops/Docker-Image-Baselayout/master/install.sh \
     && sh /tmp/baselayout-install.sh /baselayout \
     ## Install go-replace
-    && if [ "$TARGETPLATFORM" = "linux/arm64" ]; then GO_REPLACE="gr-arm64-linux"; else GO_REPLACE="gr-64-linux"; fi \
+    && if [ "$BUILDPLATFORM" = "linux/arm64" ]; then GO_REPLACE="gr-arm64-linux"; else GO_REPLACE="gr-64-linux"; fi \
     && wget -O "/baselayout/usr/local/bin/go-replace" "https://github.com/webdevops/goreplace/releases/download/1.1.2/${GO_REPLACE}" \
     && chmod +x "/baselayout/usr/local/bin/go-replace" \
     && "/baselayout/usr/local/bin/go-replace" --version \
     # Install gosu
-    && if [ "$TARGETPLATFORM" = "linux/arm64" ]; then ARCH="arm64"; else ARCH="amd64"; fi \
+    && if [ "$BUILDPLATFORM" = "linux/arm64" ]; then ARCH="arm64"; else ARCH="amd64"; fi \
     && wget -O "/baselayout/sbin/gosu" "https://github.com/tianon/gosu/releases/download/1.10/gosu-${ARCH}" \
     && wget -O "/tmp/gosu.asc" "https://github.com/tianon/gosu/releases/download/1.10/gosu-${ARCH}.asc" \
     && export GNUPGHOME="$(mktemp -d)" \

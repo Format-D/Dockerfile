@@ -24,5 +24,16 @@ RUN set -x \
     nginx \
     && docker-run-bootstrap \
     && docker-image-cleanup
+ 
+## Replace go-binaries with the correct ones for the target architecture
+ARG TARGETPLATFORM
+RUN if [ "$TARGETPLATFORM" = "linux/arm64" ]; then GO_REPLACE="gr-arm64-linux"; else GO_REPLACE="gr-64-linux"; fi \
+    && wget -O "/baselayout/usr/local/bin/go-replace" "https://github.com/webdevops/goreplace/releases/download/1.1.2/${GO_REPLACE}" \
+    && chmod +x "/baselayout/usr/local/bin/go-replace" \
+    && "/baselayout/usr/local/bin/go-replace" --version \
+    # Install gosu
+    && if [ "$TARGETPLATFORM" = "linux/arm64" ]; then ARCH="arm64"; else ARCH="amd64"; fi \
+    && wget -O "/baselayout/sbin/gosu" "https://github.com/tianon/gosu/releases/download/1.10/gosu-${ARCH}" \
+    && wget -O "/tmp/gosu.asc" "https://github.com/tianon/gosu/releases/download/1.10/gosu-${ARCH}.asc" \
 
 EXPOSE 80 443
