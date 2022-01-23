@@ -7,9 +7,14 @@ DOWNLOAD_URL="http://downloads3.ioncube.com/loader_downloads/ioncube_loaders_lin
 TMP_FILE="/tmp/ioncube_loaders.tar.gz"
 
 TEST_UNAME=$(uname -a)
+if [ "$TARGETPLATFORM" = "linux/arm64" ]; then
+    TEST_DOWNLOAD_URL="https://downloads.ioncube.com/loader_downloads/ioncube_loaders_lin_aarch64.tar.gz";
+else
+    TEST_DOWNLOAD_URL="http://downloads3.ioncube.com/loader_downloads/ioncube_loaders_lin_x86-64.tar.gz";
+fi
 echo "Uname: ${TEST_UNAME}"
+echo "Test download URL: ${TEST_UNAME}"
 echo "Targetplatform: ${TARGETPLATFORM}"
-echo "Buildplatform: ${BUILDPLATFORM}"
 
 echo "Downloading from ${DOWNLOAD_URL} ..."
 curl -sS ${DOWNLOAD_URL} -o ${TMP_FILE}
