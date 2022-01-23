@@ -74,6 +74,7 @@ RUN set -x \
         locales \
         gnupg
 
+ARG TARGETPLATFORM
 RUN set -x \
     # Install packages
     && chmod +x /opt/docker/bin/* \
@@ -88,6 +89,7 @@ RUN set -x \
     && docker-run-bootstrap \
     && docker-image-cleanup
 
+ARG TARGETPLATFORM
 RUN set -x \
     # Install services
     && apt-install \

@@ -2,8 +2,11 @@
 
 echo "Installing ionCube loader"
 
-DOWNLOAD_URL="http://downloads3.ioncube.com/loader_downloads/ioncube_loaders_lin_x86-64.tar.gz"
-(uname -a | grep -q arm64) && DOWNLOAD_URL="https://downloads.ioncube.com/loader_downloads/ioncube_loaders_lin_aarch64.tar.gz"
+if [ "$TARGETPLATFORM" = "linux/arm64" ]; then
+    DOWNLOAD_URL="https://downloads.ioncube.com/loader_downloads/ioncube_loaders_lin_aarch64.tar.gz";
+else
+    DOWNLOAD_URL="http://downloads3.ioncube.com/loader_downloads/ioncube_loaders_lin_x86-64.tar.gz";
+fi
 TMP_FILE="/tmp/ioncube_loaders.tar.gz"
 
 echo "Downloading from ${DOWNLOAD_URL} ..."
