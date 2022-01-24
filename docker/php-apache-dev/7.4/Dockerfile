@@ -26,9 +26,9 @@ RUN set -x \
     && if [ "$TARGETPLATFORM" = "linux/arm64" ]; then arch -arm64 pecl install xdebug; else pecl install xdebug; fi \
     && docker-php-ext-enable xdebug \
     # Enable php development services
-    && docker-service enable syslog \
-    && docker-service enable postfix \
-    && docker-service enable ssh \
+#    && docker-service enable syslog \
+#    && docker-service enable postfix \
+#    && docker-service enable ssh \
     && docker-run-bootstrap \
     && docker-image-cleanup
 
