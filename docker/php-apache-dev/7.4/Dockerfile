@@ -23,7 +23,7 @@ RUN set -x \
     && apt-install \
         blackfire-php \
         blackfire-agent \
-    && if [ "$TARGETPLATFORM" = "linux/arm64" ]; then arch -arm64 pecl install xdebug; else pecl install xdebug; fi \
+    && pecl install xdebug \
     && docker-php-ext-enable xdebug \
     # Enable php development services
 #    && docker-service enable syslog \
