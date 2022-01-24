@@ -15,6 +15,16 @@ ENV WEB_NO_CACHE_PATTERN="\.(css|js|gif|png|jpg|svg|json|xml)$"
 
 COPY conf/ /opt/docker/
 
+## First Replace go-binaries with the wrong ones again to make them executable without error in qemu buildx environement
+ARG BUILDPLATFORM
+RUN if [ "$BUILDPLATFORM" = "linux/arm64" ]; then GO_REPLACE="gr-arm64-linux"; else GO_REPLACE="gr-64-linux"; fi \
+    && wget -O "/usr/local/bin/go-replace" "https://github.com/webdevops/goreplace/releases/download/1.1.2/${GO_REPLACE}" \
+    && chmod +x "/usr/local/bin/go-replace" \
+    # Install gosu
+    && if [ "$BUILDPLATFORM" = "linux/arm64" ]; then ARCH="arm64"; else ARCH="amd64"; fi \
+    && wget -O "/sbin/gosu" "https://github.com/tianon/gosu/releases/download/1.10/gosu-${ARCH}" \
+    && wget -O "/tmp/gosu.asc" "https://github.com/tianon/gosu/releases/download/1.10/gosu-${ARCH}.asc"
+
 RUN set -x \
     # Install development environment
     && wget -q -O - https://packages.blackfire.io/gpg.key | apt-key add - \
