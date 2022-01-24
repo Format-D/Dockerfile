@@ -190,7 +190,7 @@ RUN set -x \
         pdo_pgsql \
         pgsql \
         soap \
-        sockets \
+#        sockets \
         tokenizer \
         sysvmsg \
         sysvsem \
