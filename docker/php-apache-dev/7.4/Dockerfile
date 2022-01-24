@@ -15,6 +15,7 @@ ENV WEB_NO_CACHE_PATTERN="\.(css|js|gif|png|jpg|svg|json|xml)$"
 
 COPY conf/ /opt/docker/
 
+ARG TARGETPLATFORM
 RUN set -x \
     # Install development environment
     && wget -q -O - https://packages.blackfire.io/gpg.key | apt-key add - \
@@ -22,7 +23,7 @@ RUN set -x \
     && apt-install \
         blackfire-php \
         blackfire-agent \
-    && pecl install xdebug \
+    && if [ "$TARGETPLATFORM" = "linux/arm64" ]; then arch -arm64 pecl install xdebug; else pecl install xdebug; fi \
     && docker-php-ext-enable xdebug \
     # Enable php development services
     && docker-service enable syslog \
