@@ -30,9 +30,9 @@ RUN apk add --no-cache \
         && sh /tmp/baselayout-install.sh /baselayout \
         ## Install go-replace
     && if [ "$BUILDPLATFORM" = "linux/arm64" ]; then GO_REPLACE="gr-arm64-linux"; else GO_REPLACE="gr-64-linux"; fi \
-    && wget -O "/usr/local/bin/go-replace" "https://github.com/webdevops/goreplace/releases/download/1.1.2/${GO_REPLACE}" \
-    && chmod +x "/usr/local/bin/go-replace" \
-    && "/usr/local/bin/go-replace" --version \
+    && wget -O "/baselayout/usr/local/bin/go-replace" "https://github.com/webdevops/goreplace/releases/download/1.1.2/${GO_REPLACE}" \
+    && chmod +x "/baselayout/usr/local/bin/go-replace" \
+    && "/baselayout/usr/local/bin/go-replace" --version \
         && ln -s /baselayout/usr/local/bin/go-replace /usr/local/bin/ \
         # Install gosu
     && if [ "$BUILDPLATFORM" = "linux/arm64" ]; then ARCH="arm64"; else ARCH="amd64"; fi \
