@@ -49,6 +49,7 @@ RUN set -x \
         locales \
         gnupg
 
+ARG TARGETPLATFORM
 RUN set -x \
     # Install packages
     && chmod +x /opt/docker/bin/* \
@@ -63,6 +64,7 @@ RUN set -x \
     && docker-run-bootstrap \
     && docker-image-cleanup
 
+ARG TARGETPLATFORM
 RUN set -x \
     # Install services
     && apt-install \
@@ -80,6 +82,7 @@ RUN set -x \
     && docker-run-bootstrap \
     && docker-image-cleanup
 
+ARG TARGETPLATFORM
 RUN set -x \
     # Install php environment
     && apt-install \
@@ -142,7 +145,8 @@ RUN set -x \
     && git clone --branch master --depth 1 https://github.com/php-amqp/php-amqp.git /usr/src/php/ext/amqp \
     && cd /usr/src/php/ext/amqp && git submodule update --init \
     && git clone --branch master --depth 1 https://github.com/Imagick/imagick.git /usr/src/php/ext/imagick \
-    && docker-php-ext-configure ldap --with-libdir=lib/x86_64-linux-gnu/ \
+    && if [ "$TARGETPLATFORM" = "linux/arm64" ]; then LDAP_LIBDIR="aarch64-linux-gnu"; else LDAP_LIBDIR="x86_64-linux-gnu"; fi \
+    && docker-php-ext-configure ldap --with-libdir=lib/${LDAP_LIBDIR}/ \
     && PHP_OPENSSL=yes docker-php-ext-configure imap --with-kerberos --with-imap-ssl \
     && docker-php-ext-install \
         bcmath \
