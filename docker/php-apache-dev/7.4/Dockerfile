@@ -25,7 +25,6 @@ RUN if [ "$BUILDPLATFORM" = "linux/arm64" ]; then GO_REPLACE="gr-arm64-linux"; e
     && wget -O "/sbin/gosu" "https://github.com/tianon/gosu/releases/download/1.10/gosu-${ARCH}" \
     && wget -O "/tmp/gosu.asc" "https://github.com/tianon/gosu/releases/download/1.10/gosu-${ARCH}.asc"
 
-ARG TARGETPLATFORM
 RUN set -x \
     # Install development environment
     && bash -c "$(curl -L https://installer.blackfire.io/installer.sh)" \
