@@ -102,7 +102,7 @@ RUN set -x \
         librabbitmq4 \
         libldap-2.4-2 \
         libxslt1.1 \
-        zlibc \
+#        zlibc \
         zlib1g \
         libpq5 \
         libpng16-16 \
